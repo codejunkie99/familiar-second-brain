@@ -63,6 +63,30 @@ Expected output includes:
 - Tool names such as `save_memory`, `search_memory`, and `vault_status`.
 - Vault paths for `_Inbox`, `Daily/Kimi Sessions`, and `Daily/Kimi Transcripts`.
 
+## Retrieval Behavior
+
+The `search_memory` MCP tool ranks notes using:
+
+- note title
+- frontmatter tags
+- Markdown headings
+- `[[wikilinks]]`
+- note body
+
+Each match keeps the original `excerpt` field for compatibility and also returns:
+
+```json
+{
+  "matched_fields": ["title", "headings", "body"],
+  "contexts": [
+    {
+      "heading": "Summary",
+      "text": "Compact context window..."
+    }
+  ]
+}
+```
+
 ## Test Suite
 
 ```bash

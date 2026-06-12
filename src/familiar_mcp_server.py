@@ -106,6 +106,56 @@ def title_from_note(path: Path, body: str) -> str:
     return path.stem
 
 
+def strip_frontmatter(body: str) -> str:
+    if not body.startswith("---\n"):
+        return body
+    end = body.find("\n---", 4)
+    if end < 0:
+        return body
+    return body[end + 4 :].lstrip()
+
+
+def frontmatter_text(body: str) -> str:
+    if not body.startswith("---\n"):
+        return ""
+    end = body.find("\n---", 4)
+    if end < 0:
+        return ""
+    return body[4:end]
+
+
+def tags_from_frontmatter(body: str) -> list[str]:
+    tags = []
+    lines = frontmatter_text(body).splitlines()
+    index = 0
+    while index < len(lines):
+        line = lines[index]
+        if line.strip().startswith("tags:"):
+            inline = line.split(":", 1)[1].strip()
+            if inline:
+                tags.extend(clean_list(inline.strip("[]")))
+            index += 1
+            while index < len(lines) and lines[index].lstrip().startswith("- "):
+                tags.append(lines[index].split("- ", 1)[1].strip())
+                index += 1
+            continue
+        index += 1
+    return clean_list(tags)
+
+
+def wikilinks_from_body(body: str) -> list[str]:
+    return clean_list(re.findall(r"\[\[([^\]]+)\]\]", body))
+
+
+def heading_lines(body: str) -> list[str]:
+    headings = []
+    for line in strip_frontmatter(body).splitlines():
+        match = re.match(r"^#{1,6}\s+(.+)$", line.strip())
+        if match:
+            headings.append(match.group(1).strip())
+    return headings
+
+
 def iter_markdown_notes(vault: Path):
     vault = ensure_vault(vault)
     for path in vault.rglob("*.md"):
@@ -119,16 +169,83 @@ def iter_markdown_notes(vault: Path):
 
 
 def excerpt_for(body: str, query_terms: list[str], size: int = 220) -> str:
-    lower = body.lower()
-    positions = [lower.find(term) for term in query_terms if lower.find(term) >= 0]
-    start = max(0, (min(positions) if positions else 0) - 80)
-    excerpt = re.sub(r"\s+", " ", body[start : start + size]).strip()
-    return excerpt
+    contexts = context_windows(body, query_terms, size)
+    if contexts:
+        return contexts[0]["text"]
+    text = re.sub(r"\s+", " ", strip_frontmatter(body)).strip()
+    return text[:size]
 
 
-def score_note(body: str, query_terms: list[str]) -> int:
-    lower = body.lower()
-    return sum(lower.count(term) for term in query_terms)
+def field_score(value: str, query_terms: list[str], weight: int) -> int:
+    lower = value.lower()
+    return sum(lower.count(term) * weight for term in query_terms)
+
+
+def matching_fields(title: str, body: str, query_terms: list[str]) -> list[str]:
+    fields = []
+    field_values = {
+        "title": title,
+        "tags": " ".join(tags_from_frontmatter(body)),
+        "headings": " ".join(heading_lines(body)),
+        "links": " ".join(wikilinks_from_body(body)),
+        "body": strip_frontmatter(body),
+    }
+    for name, value in field_values.items():
+        lower = value.lower()
+        if any(term in lower for term in query_terms):
+            fields.append(name)
+    return fields
+
+
+def score_note(title: str, body: str, query_terms: list[str]) -> int:
+    return (
+        field_score(title, query_terms, 30)
+        + field_score(" ".join(tags_from_frontmatter(body)), query_terms, 22)
+        + field_score(" ".join(heading_lines(body)), query_terms, 16)
+        + field_score(" ".join(wikilinks_from_body(body)), query_terms, 14)
+        + field_score(strip_frontmatter(body), query_terms, 3)
+    )
+
+
+def note_sections(body: str) -> list[dict]:
+    sections = []
+    heading = ""
+    current = []
+    for line in strip_frontmatter(body).splitlines():
+        match = re.match(r"^#{1,6}\s+(.+)$", line.strip())
+        if match:
+            if current:
+                sections.append({"heading": heading, "text": "\n".join(current).strip()})
+            heading = match.group(1).strip()
+            current = []
+            continue
+        current.append(line)
+    if current:
+        sections.append({"heading": heading, "text": "\n".join(current).strip()})
+    return [section for section in sections if re.sub(r"\s+", "", section["text"])]
+
+
+def context_windows(body: str, query_terms: list[str], size: int = 220) -> list[dict]:
+    sections = note_sections(body)
+    if not sections:
+        text = re.sub(r"\s+", " ", strip_frontmatter(body)).strip()
+        return [{"heading": "", "text": text[:size]}] if text else []
+
+    ranked = []
+    for index, section in enumerate(sections):
+        score = field_score(section["heading"] + "\n" + section["text"], query_terms, 1)
+        ranked.append((score, index, section))
+    ranked.sort(key=lambda item: (-item[0], item[1]))
+    if ranked[0][0] == 0:
+        ranked = [(0, index, section) for index, section in enumerate(sections)]
+
+    contexts = []
+    for _, _, section in ranked[:3]:
+        text = re.sub(r"\s+", " ", section["text"]).strip()
+        if not text:
+            continue
+        contexts.append({"heading": section["heading"], "text": text[:size]})
+    return contexts
 
 
 def tool_save_memory(vault: Path, arguments: dict) -> dict:
@@ -154,20 +271,26 @@ def tool_search_memory(vault: Path, arguments: dict) -> dict:
         raise ValueError("query is required")
     limit = int(arguments.get("limit") or 10)
     limit = max(1, min(limit, 50))
+    context_chars = int(arguments.get("context_chars") or 220)
+    context_chars = max(80, min(context_chars, 1000))
     terms = [term for term in re.split(r"\W+", query) if term]
     matches = []
     for path in iter_markdown_notes(vault):
         body = path.read_text(encoding="utf-8", errors="replace")
-        score = score_note(body, terms)
+        title = title_from_note(path, body)
+        score = score_note(title, body, terms)
         if score <= 0:
             continue
+        contexts = context_windows(body, terms, context_chars)
         matches.append(
             {
                 "path": str(path.relative_to(ensure_vault(vault))),
-                "title": title_from_note(path, body),
+                "title": title,
                 "score": score,
                 "modified": datetime.fromtimestamp(path.stat().st_mtime, timezone.utc).isoformat(),
-                "excerpt": excerpt_for(body, terms),
+                "matched_fields": matching_fields(title, body, terms),
+                "contexts": contexts,
+                "excerpt": contexts[0]["text"] if contexts else excerpt_for(body, terms, context_chars),
             }
         )
     matches.sort(key=lambda item: (-item["score"], item["path"]))
