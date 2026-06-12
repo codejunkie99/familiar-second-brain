@@ -11,6 +11,7 @@ build/
 *.bak.*
 coverage.xml
 .coverage
+.superpowers/
 
 # Local vault data belongs outside this repo.
 familiar-vault/
