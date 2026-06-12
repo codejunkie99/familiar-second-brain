@@ -132,6 +132,25 @@ python3 "$KIMI_SKILL_DIR/scripts/vault_audit.py" \
 
 The audit is read-only. It reports candidate duplicate notes and simple contradiction pairs with source paths. Do not delete or rewrite notes unless the user explicitly approves a separate cleanup step.
 
+## Resurfacing
+
+Use `scripts/resurface.py` when the user asks to bring back old useful notes, remind them of relevant prior context, or review what may matter now:
+
+```bash
+python3 "$KIMI_SKILL_DIR/scripts/resurface.py" \
+  --vault "$PWD" \
+  --date "$(date +%F)" \
+  --limit 5
+```
+
+It writes:
+
+```text
+Daily/Resurfaced/YYYY-MM-DD Resurfaced Notes.md
+```
+
+It also records surfaced paths in `.familiar/resurface-state.json` so the same note is not repeated every run.
+
 ## Default Behaviors
 
 - "Remember this" or "save this" means create a Markdown note.
@@ -140,6 +159,7 @@ The audit is read-only. It reports candidate duplicate notes and simple contradi
 - "Clean up my inbox" means run inbox triage in preview mode first.
 - "What is the state of this project?" means generate or read project briefs.
 - "Is my brain inconsistent?" means run the vault audit first.
+- "What should I remember again?" means run resurfacing.
 - "From my brain" means search the vault before answering.
 - Project deliverables should be saved under `Projects/` when the project name is clear.
 - Never expose or edit Kimi Work private tokens, credentials, or internal app databases for second-brain behavior.

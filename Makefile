@@ -8,6 +8,7 @@ test:
 	$(PYTHON) kimi_skill/tests/test_brain_brief.py
 	$(PYTHON) kimi_skill/tests/test_inbox_triage.py
 	$(PYTHON) kimi_skill/tests/test_project_briefs.py
+	$(PYTHON) kimi_skill/tests/test_resurface.py
 	$(PYTHON) kimi_skill/tests/test_save_to_familiar.py
 	$(PYTHON) kimi_skill/tests/test_summarize_sessions.py
 	$(PYTHON) kimi_skill/tests/test_vault_audit.py

@@ -82,6 +82,26 @@ Report likely duplicate notes and simple contradiction pairs without modifying f
 
 The audit is read-only. It returns JSON with `duplicates`, `contradictions`, source paths, and reasons.
 
+## Resurface Useful Notes
+
+Resurface older notes that overlap with recent session, inbox, and project context:
+
+```bash
+/usr/bin/python3 kimi_skill/scripts/resurface.py \
+  --vault "$HOME/Documents/kimi/workspace/familiar-vault" \
+  --date "$(date +%F)" \
+  --limit 5
+```
+
+Output:
+
+```text
+Daily/Resurfaced/YYYY-MM-DD Resurfaced Notes.md
+.familiar/resurface-state.json
+```
+
+The state file prevents the same source note from being resurfaced repeatedly.
+
 ## Save A Note From Kimi Work
 
 ```bash
@@ -146,6 +166,7 @@ The tests cover:
 - Inbox triage suggestions and safe apply behavior.
 - Project memory brief generation.
 - Read-only duplicate and contradiction audit.
+- Recurring useful-note resurfacing with state.
 - Maintenance-session filtering.
 
 ## Updating The Live Install
