@@ -1,0 +1,104 @@
+<svg width="960" height="360" viewBox="0 0 960 360" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">Familiar Second Brain data flow</title>
+  <desc id="desc">Kimi Work sessions flow into capture scripts, the Familiar vault, and MCP clients.</desc>
+  <style>
+    :root {
+      --ink: #17202a;
+      --muted: #5d6d7e;
+      --line: #7f8c8d;
+      --vault: #2d9cdb;
+      --kimi: #8e44ad;
+      --mcp: #16a085;
+      --capture: #f39c12;
+      --paper: #fbfcfc;
+    }
+    .bg { fill: #f7f9fb; }
+    .node { fill: var(--paper); stroke-width: 2; filter: url(#shadow); }
+    .kimi { stroke: var(--kimi); }
+    .capture { stroke: var(--capture); }
+    .vault { stroke: var(--vault); }
+    .mcp { stroke: var(--mcp); }
+    .label { fill: var(--ink); font: 700 20px ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+    .sub { fill: var(--muted); font: 500 13px ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+    .path { stroke: var(--line); stroke-width: 3; stroke-linecap: round; stroke-dasharray: 8 10; }
+    .dot { filter: url(#glow); }
+    .pulse { transform-origin: center; animation: pulse 2.8s ease-in-out infinite; }
+    .pulse-delay { animation-delay: .8s; }
+    .pulse-delay-2 { animation-delay: 1.6s; }
+    @keyframes pulse {
+      0%, 100% { opacity: .95; transform: scale(1); }
+      50% { opacity: .72; transform: scale(1.035); }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .pulse { animation: none; }
+    }
+  </style>
+  <defs>
+    <filter id="shadow" x="-20%" y="-40%" width="140%" height="180%">
+      <feDropShadow dx="0" dy="10" stdDeviation="12" flood-color="#1f2d3d" flood-opacity=".12"/>
+    </filter>
+    <filter id="glow" x="-100%" y="-100%" width="300%" height="300%">
+      <feGaussianBlur stdDeviation="4" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <path id="p1" d="M240 112 C306 96 342 96 404 112"/>
+    <path id="p2" d="M560 112 C626 96 662 96 724 112"/>
+    <path id="p3" d="M785 190 C696 260 298 260 178 190"/>
+  </defs>
+
+  <rect class="bg" width="960" height="360" rx="24"/>
+  <path class="path" d="M240 112 C306 96 342 96 404 112"/>
+  <path class="path" d="M560 112 C626 96 662 96 724 112"/>
+  <path class="path" d="M785 190 C696 260 298 260 178 190"/>
+
+  <g class="pulse">
+    <rect class="node kimi" x="58" y="64" width="196" height="128" rx="18"/>
+    <circle cx="95" cy="103" r="18" fill="#8e44ad" opacity=".14"/>
+    <path d="M87 103h16M95 95v16" stroke="#8e44ad" stroke-width="3" stroke-linecap="round"/>
+    <text class="label" x="120" y="108">Kimi Work</text>
+    <text class="sub" x="82" y="143">sessions, prompts, outputs</text>
+  </g>
+
+  <g class="pulse pulse-delay">
+    <rect class="node capture" x="382" y="64" width="196" height="128" rx="18"/>
+    <circle cx="419" cy="103" r="18" fill="#f39c12" opacity=".16"/>
+    <path d="M411 101h16l-5-6M427 107h-16l5 6" stroke="#f39c12" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+    <text class="label" x="444" y="108">Capture</text>
+    <text class="sub" x="412" y="143">summary plus transcript</text>
+  </g>
+
+  <g class="pulse pulse-delay-2">
+    <rect class="node vault" x="706" y="64" width="196" height="128" rx="18"/>
+    <circle cx="743" cy="103" r="18" fill="#2d9cdb" opacity=".16"/>
+    <path d="M735 99h16v16h-16zM739 94h8" stroke="#2d9cdb" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+    <text class="label" x="768" y="108">Familiar</text>
+    <text class="sub" x="734" y="143">Markdown vault</text>
+  </g>
+
+  <g class="pulse pulse-delay">
+    <rect class="node mcp" x="340" y="250" width="280" height="74" rx="18"/>
+    <circle cx="376" cy="287" r="16" fill="#16a085" opacity=".16"/>
+    <path d="M368 287h16M376 279v16" stroke="#16a085" stroke-width="3" stroke-linecap="round"/>
+    <text class="label" x="406" y="292">MCP clients</text>
+    <text class="sub" x="514" y="292">search, read, save</text>
+  </g>
+
+  <circle class="dot" r="8" fill="#8e44ad">
+    <animateMotion dur="3.2s" repeatCount="indefinite">
+      <mpath href="#p1"/>
+    </animateMotion>
+  </circle>
+  <circle class="dot" r="8" fill="#f39c12">
+    <animateMotion dur="3.2s" begin=".55s" repeatCount="indefinite">
+      <mpath href="#p2"/>
+    </animateMotion>
+  </circle>
+  <circle class="dot" r="8" fill="#16a085">
+    <animateMotion dur="4s" begin=".35s" repeatCount="indefinite">
+      <mpath href="#p3"/>
+    </animateMotion>
+  </circle>
+</svg>

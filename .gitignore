@@ -1,0 +1,23 @@
+.DS_Store
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.venv/
+dist/
+build/
+*.egg-info/
+*.bak.*
+coverage.xml
+.coverage
+
+# Local vault data belongs outside this repo.
+familiar-vault/
+Daily/
+_Inbox/
+Projects/
+Research/
+People/
+Ideas/
+_Attachments/

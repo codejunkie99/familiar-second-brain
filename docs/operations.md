@@ -1,0 +1,70 @@
+# Operations
+
+## Capture Kimi Sessions
+
+Run deterministic capture without calling the Kimi model:
+
+```bash
+/usr/bin/python3 kimi_skill/scripts/summarize_sessions.py --no-model
+```
+
+Run model-backed summaries using Kimi's local model config:
+
+```bash
+/usr/bin/python3 kimi_skill/scripts/summarize_sessions.py
+```
+
+Outputs:
+
+```text
+Daily/Kimi Sessions/
+Daily/Kimi Transcripts/
+```
+
+## Save A Note From Kimi Work
+
+```bash
+/usr/bin/python3 kimi_skill/scripts/save_to_familiar.py \
+  --vault "$HOME/Documents/kimi/workspace/familiar-vault" \
+  --title "Project decision" \
+  --content "The durable thing to remember." \
+  --links "Kimi Work,Second Brain" \
+  --kind "memory"
+```
+
+## MCP Smoke Test
+
+```bash
+/usr/bin/python3 scripts/smoke_mcp.py \
+  --vault "$HOME/Documents/kimi/workspace/familiar-vault"
+```
+
+Expected output includes:
+
+- Tool names such as `save_memory`, `search_memory`, and `vault_status`.
+- Vault paths for `_Inbox`, `Daily/Kimi Sessions`, and `Daily/Kimi Transcripts`.
+
+## Test Suite
+
+```bash
+make test
+```
+
+The tests cover:
+
+- MCP stdio framing.
+- Vault path safety.
+- Save/search/read behavior.
+- Kimi session summary capture.
+- Kimi transcript capture.
+- Maintenance-session filtering.
+
+## Updating The Live Install
+
+After editing source files:
+
+```bash
+/usr/bin/python3 scripts/install.py
+```
+
+Then restart or reopen any MCP client that caches tool definitions.
