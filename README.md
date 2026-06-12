@@ -113,6 +113,7 @@ The repo deliberately does not include personal vault notes, Kimi transcripts, A
 - [Architecture](docs/architecture.md)
 - [Installation](docs/installation.md)
 - [Operations](docs/operations.md)
+- [Roadmap](docs/roadmap.md)
 - [Security](docs/security.md)
 
 ## Development
