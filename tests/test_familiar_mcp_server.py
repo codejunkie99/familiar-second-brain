@@ -64,6 +64,64 @@ class FamiliarMcpServerTests(unittest.TestCase):
             self.assertEqual(result["matches"][0]["title"], "Retrieval Contract")
             self.assertIn("answer from the familiar vault", result["matches"][0]["excerpt"])
 
+    def test_search_memory_prioritizes_metadata_and_returns_context_windows(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            vault = Path(tmp) / "vault"
+            research = vault / "Research"
+            research.mkdir(parents=True)
+            contract = research / "retrieval-contract.md"
+            noisy = research / "noisy-body.md"
+            contract.write_text(
+                "\n".join(
+                    [
+                        "---",
+                        "source: test",
+                        "kind: memory",
+                        "tags:",
+                        "- second-brain",
+                        "- retrieval",
+                        "---",
+                        "",
+                        "# Familiar Retrieval Contract",
+                        "",
+                        "## What did I say",
+                        "",
+                        "Kimi should answer from the familiar vault with source paths.",
+                        "",
+                        "## Links",
+                        "",
+                        "- [[Kimi Work]]",
+                    ]
+                ),
+                encoding="utf-8",
+            )
+            noisy.write_text(
+                "\n".join(
+                    [
+                        "# Random Body Matches",
+                        "",
+                        "retrieval contract second brain retrieval contract second brain retrieval contract second brain",
+                    ]
+                ),
+                encoding="utf-8",
+            )
+            server = load_server()
+
+            result = server.tool_search_memory(
+                vault,
+                {"query": "retrieval contract second brain", "limit": 5, "context_chars": 120},
+            )
+
+            self.assertGreaterEqual(len(result["matches"]), 2)
+            first = result["matches"][0]
+            self.assertEqual(first["path"], "Research/retrieval-contract.md")
+            self.assertIn("title", first["matched_fields"])
+            self.assertIn("tags", first["matched_fields"])
+            self.assertIn("contexts", first)
+            self.assertGreaterEqual(len(first["contexts"]), 1)
+            self.assertIn("Kimi should answer from the familiar vault", first["contexts"][0]["text"])
+            self.assertEqual(first["contexts"][0]["heading"], "What did I say")
+
     def test_rejects_path_traversal_for_note_reads(self):
         with tempfile.TemporaryDirectory() as tmp:
             vault = Path(tmp) / "vault"

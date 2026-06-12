@@ -19,7 +19,7 @@ The result is simple: when you ask Kimi Work or another MCP-capable app to use `
 | Capability | Where it lives | Output |
 | --- | --- | --- |
 | Save durable memories | `save_memory` MCP tool and Kimi skill | Markdown notes in `_Inbox/` or project folders |
-| Search the brain | `search_memory` MCP tool | Ranked Markdown matches with excerpts |
+| Search the brain | `search_memory` MCP tool | Ranked Markdown matches with matched fields and context windows |
 | Read and write notes | `read_note`, `write_note` MCP tools | Plain `.md` files inside the vault |
 | Capture Kimi sessions | `summarize_sessions.py` | `Daily/Kimi Sessions/` and `Daily/Kimi Transcripts/` |
 | Generate daily brain briefs | `brain_brief.py` | `Daily/YYYY-MM-DD Brain Brief.md` |
@@ -83,7 +83,7 @@ familiar-second-brain/
 The server exposes these tools:
 
 - `save_memory`: create a Markdown note in the vault.
-- `search_memory`: search Markdown notes by keyword.
+- `search_memory`: search Markdown notes by keyword with title, tag, heading, link, and body scoring.
 - `read_note`: read a note by relative path.
 - `write_note`: write a Markdown note by relative path.
 - `list_recent_notes`: list recently modified notes.
