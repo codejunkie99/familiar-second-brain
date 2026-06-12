@@ -103,12 +103,31 @@ python3 "$KIMI_SKILL_DIR/scripts/inbox_triage.py" \
 
 The apply mode only moves files. It does not rewrite note content.
 
+## Project Briefs
+
+Use `scripts/project_briefs.py` when the user asks for project state, project memory, or a current project summary:
+
+```bash
+python3 "$KIMI_SKILL_DIR/scripts/project_briefs.py" \
+  --vault "$PWD" \
+  --no-model
+```
+
+It writes or refreshes:
+
+```text
+Projects/<project>/Brief.md
+```
+
+Project briefs include project notes, related sessions, related inbox notes, decisions, open loops, and source paths.
+
 ## Default Behaviors
 
 - "Remember this" or "save this" means create a Markdown note.
 - "Summarize this session" means save a concise session summary.
 - "What did the brain learn today?" means generate or read the daily brain brief.
 - "Clean up my inbox" means run inbox triage in preview mode first.
+- "What is the state of this project?" means generate or read project briefs.
 - "From my brain" means search the vault before answering.
 - Project deliverables should be saved under `Projects/` when the project name is clear.
 - Never expose or edit Kimi Work private tokens, credentials, or internal app databases for second-brain behavior.

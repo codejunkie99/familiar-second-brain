@@ -59,6 +59,18 @@ Apply suggested moves after review:
 
 The first version is conservative: it suggests tags and links, but `--apply` only moves notes to safer folders. It does not rewrite note content.
 
+## Generate Project Briefs
+
+Create or refresh `Brief.md` for each project under `Projects/`:
+
+```bash
+/usr/bin/python3 kimi_skill/scripts/project_briefs.py \
+  --vault "$HOME/Documents/kimi/workspace/familiar-vault" \
+  --no-model
+```
+
+Each project brief includes matching project notes, related Kimi session summaries, related inbox notes, detected decisions, open loops, and source paths.
+
 ## Save A Note From Kimi Work
 
 ```bash
@@ -121,6 +133,7 @@ The tests cover:
 - Kimi transcript capture.
 - Daily brain brief generation.
 - Inbox triage suggestions and safe apply behavior.
+- Project memory brief generation.
 - Maintenance-session filtering.
 
 ## Updating The Live Install
