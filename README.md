@@ -24,6 +24,7 @@ The result is simple: when you ask Kimi Work or another MCP-capable app to use `
 | Capture Kimi sessions | `summarize_sessions.py` | `Daily/Kimi Sessions/` and `Daily/Kimi Transcripts/` |
 | Generate daily brain briefs | `brain_brief.py` | `Daily/YYYY-MM-DD Brain Brief.md` |
 | Triage inbox notes | `inbox_triage.py` | suggested moves, tags, links, and optional safe moves |
+| Generate project briefs | `project_briefs.py` | `Projects/<project>/Brief.md` |
 | Share with apps | MCP configs | Kimi Work, Codex, Claude, Cursor |
 
 ## Quick Start
@@ -66,6 +67,7 @@ familiar-second-brain/
       summarize_sessions.py       # Kimi session summary and transcript capture
       brain_brief.py              # daily brief from sessions, transcripts, inbox notes
       inbox_triage.py             # suggestion-first inbox organization
+      project_briefs.py           # per-project memory brief generation
     tests/
   scripts/
     install.py                    # local installer and config writer
