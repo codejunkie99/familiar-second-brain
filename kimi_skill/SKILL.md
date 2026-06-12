@@ -65,10 +65,30 @@ It tracks fingerprints in `.familiar/kimi-session-summarizer-state.json`, so it 
 
 If the user asks whether Kimi sessions are saved to the second brain, check `Daily/Kimi Sessions/` and `_Inbox/` before answering.
 
+## Daily Brain Brief
+
+Use `scripts/brain_brief.py` when the user asks what the brain learned today, wants a daily summary, or asks for current open loops:
+
+```bash
+python3 "$KIMI_SKILL_DIR/scripts/brain_brief.py" \
+  --vault "$PWD" \
+  --date "$(date +%F)" \
+  --no-model
+```
+
+It writes a deterministic note to:
+
+```text
+Daily/YYYY-MM-DD Brain Brief.md
+```
+
+The note includes changed session context, inbox captures, decisions, open loops, and source paths.
+
 ## Default Behaviors
 
 - "Remember this" or "save this" means create a Markdown note.
 - "Summarize this session" means save a concise session summary.
+- "What did the brain learn today?" means generate or read the daily brain brief.
 - "From my brain" means search the vault before answering.
 - Project deliverables should be saved under `Projects/` when the project name is clear.
 - Never expose or edit Kimi Work private tokens, credentials, or internal app databases for second-brain behavior.

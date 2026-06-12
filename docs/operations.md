@@ -21,6 +21,25 @@ Daily/Kimi Sessions/
 Daily/Kimi Transcripts/
 ```
 
+## Generate A Daily Brain Brief
+
+Create a deterministic daily brief without calling a model:
+
+```bash
+/usr/bin/python3 kimi_skill/scripts/brain_brief.py \
+  --vault "$HOME/Documents/kimi/workspace/familiar-vault" \
+  --date "$(date +%F)" \
+  --no-model
+```
+
+Output:
+
+```text
+Daily/YYYY-MM-DD Brain Brief.md
+```
+
+The brief includes changed session notes, inbox notes, decisions, open loops, reserved resurfacing space, and source paths.
+
 ## Save A Note From Kimi Work
 
 ```bash
@@ -57,6 +76,7 @@ The tests cover:
 - Save/search/read behavior.
 - Kimi session summary capture.
 - Kimi transcript capture.
+- Daily brain brief generation.
 - Maintenance-session filtering.
 
 ## Updating The Live Install
