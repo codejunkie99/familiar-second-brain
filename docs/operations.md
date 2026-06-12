@@ -40,6 +40,25 @@ Daily/YYYY-MM-DD Brain Brief.md
 
 The brief includes changed session notes, inbox notes, decisions, open loops, reserved resurfacing space, and source paths.
 
+## Triage The Inbox
+
+Preview suggested moves, tags, links, and merge candidates:
+
+```bash
+/usr/bin/python3 kimi_skill/scripts/inbox_triage.py \
+  --vault "$HOME/Documents/kimi/workspace/familiar-vault"
+```
+
+Apply suggested moves after review:
+
+```bash
+/usr/bin/python3 kimi_skill/scripts/inbox_triage.py \
+  --vault "$HOME/Documents/kimi/workspace/familiar-vault" \
+  --apply
+```
+
+The first version is conservative: it suggests tags and links, but `--apply` only moves notes to safer folders. It does not rewrite note content.
+
 ## Save A Note From Kimi Work
 
 ```bash
@@ -101,6 +120,7 @@ The tests cover:
 - Kimi session summary capture.
 - Kimi transcript capture.
 - Daily brain brief generation.
+- Inbox triage suggestions and safe apply behavior.
 - Maintenance-session filtering.
 
 ## Updating The Live Install

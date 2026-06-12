@@ -84,11 +84,31 @@ Daily/YYYY-MM-DD Brain Brief.md
 
 The note includes changed session context, inbox captures, decisions, open loops, and source paths.
 
+## Inbox Triage
+
+Use `scripts/inbox_triage.py` when the user asks to clean up, organize, or file unsorted memories:
+
+```bash
+python3 "$KIMI_SKILL_DIR/scripts/inbox_triage.py" \
+  --vault "$PWD"
+```
+
+This previews suggested destinations, tags, links, and merge candidates. Only use `--apply` after the user wants the suggested moves applied:
+
+```bash
+python3 "$KIMI_SKILL_DIR/scripts/inbox_triage.py" \
+  --vault "$PWD" \
+  --apply
+```
+
+The apply mode only moves files. It does not rewrite note content.
+
 ## Default Behaviors
 
 - "Remember this" or "save this" means create a Markdown note.
 - "Summarize this session" means save a concise session summary.
 - "What did the brain learn today?" means generate or read the daily brain brief.
+- "Clean up my inbox" means run inbox triage in preview mode first.
 - "From my brain" means search the vault before answering.
 - Project deliverables should be saved under `Projects/` when the project name is clear.
 - Never expose or edit Kimi Work private tokens, credentials, or internal app databases for second-brain behavior.
