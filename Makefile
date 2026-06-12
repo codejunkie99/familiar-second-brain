@@ -10,6 +10,7 @@ test:
 	$(PYTHON) kimi_skill/tests/test_project_briefs.py
 	$(PYTHON) kimi_skill/tests/test_save_to_familiar.py
 	$(PYTHON) kimi_skill/tests/test_summarize_sessions.py
+	$(PYTHON) kimi_skill/tests/test_vault_audit.py
 
 smoke:
 	$(PYTHON) scripts/smoke_mcp.py --vault "$(VAULT)"
