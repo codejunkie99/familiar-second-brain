@@ -71,6 +71,17 @@ Create or refresh `Brief.md` for each project under `Projects/`:
 
 Each project brief includes matching project notes, related Kimi session summaries, related inbox notes, detected decisions, open loops, and source paths.
 
+## Audit Vault Quality
+
+Report likely duplicate notes and simple contradiction pairs without modifying files:
+
+```bash
+/usr/bin/python3 kimi_skill/scripts/vault_audit.py \
+  --vault "$HOME/Documents/kimi/workspace/familiar-vault"
+```
+
+The audit is read-only. It returns JSON with `duplicates`, `contradictions`, source paths, and reasons.
+
 ## Save A Note From Kimi Work
 
 ```bash
@@ -134,6 +145,7 @@ The tests cover:
 - Daily brain brief generation.
 - Inbox triage suggestions and safe apply behavior.
 - Project memory brief generation.
+- Read-only duplicate and contradiction audit.
 - Maintenance-session filtering.
 
 ## Updating The Live Install

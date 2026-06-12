@@ -25,6 +25,7 @@ The result is simple: when you ask Kimi Work or another MCP-capable app to use `
 | Generate daily brain briefs | `brain_brief.py` | `Daily/YYYY-MM-DD Brain Brief.md` |
 | Triage inbox notes | `inbox_triage.py` | suggested moves, tags, links, and optional safe moves |
 | Generate project briefs | `project_briefs.py` | `Projects/<project>/Brief.md` |
+| Audit vault quality | `vault_audit.py` | duplicate and contradiction reports |
 | Share with apps | MCP configs | Kimi Work, Codex, Claude, Cursor |
 
 ## Quick Start
@@ -68,6 +69,7 @@ familiar-second-brain/
       brain_brief.py              # daily brief from sessions, transcripts, inbox notes
       inbox_triage.py             # suggestion-first inbox organization
       project_briefs.py           # per-project memory brief generation
+      vault_audit.py              # read-only duplicate and contradiction audit
     tests/
   scripts/
     install.py                    # local installer and config writer

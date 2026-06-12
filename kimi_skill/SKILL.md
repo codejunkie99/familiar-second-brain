@@ -121,6 +121,17 @@ Projects/<project>/Brief.md
 
 Project briefs include project notes, related sessions, related inbox notes, decisions, open loops, and source paths.
 
+## Vault Audit
+
+Use `scripts/vault_audit.py` when the user asks whether the brain has duplicates, conflicts, contradictions, or stale conflicting facts:
+
+```bash
+python3 "$KIMI_SKILL_DIR/scripts/vault_audit.py" \
+  --vault "$PWD"
+```
+
+The audit is read-only. It reports candidate duplicate notes and simple contradiction pairs with source paths. Do not delete or rewrite notes unless the user explicitly approves a separate cleanup step.
+
 ## Default Behaviors
 
 - "Remember this" or "save this" means create a Markdown note.
@@ -128,6 +139,7 @@ Project briefs include project notes, related sessions, related inbox notes, dec
 - "What did the brain learn today?" means generate or read the daily brain brief.
 - "Clean up my inbox" means run inbox triage in preview mode first.
 - "What is the state of this project?" means generate or read project briefs.
+- "Is my brain inconsistent?" means run the vault audit first.
 - "From my brain" means search the vault before answering.
 - Project deliverables should be saved under `Projects/` when the project name is clear.
 - Never expose or edit Kimi Work private tokens, credentials, or internal app databases for second-brain behavior.
