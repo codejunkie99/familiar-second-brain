@@ -1,0 +1,180 @@
+# Operations
+
+## Capture Kimi Sessions
+
+Run deterministic capture without calling the Kimi model:
+
+```bash
+/usr/bin/python3 kimi_skill/scripts/summarize_sessions.py --no-model
+```
+
+Run model-backed summaries using Kimi's local model config:
+
+```bash
+/usr/bin/python3 kimi_skill/scripts/summarize_sessions.py
+```
+
+Outputs:
+
+```text
+Daily/Kimi Sessions/
+Daily/Kimi Transcripts/
+```
+
+## Generate A Daily Brain Brief
+
+Create a deterministic daily brief without calling a model:
+
+```bash
+/usr/bin/python3 kimi_skill/scripts/brain_brief.py \
+  --vault "$HOME/Documents/kimi/workspace/familiar-vault" \
+  --date "$(date +%F)" \
+  --no-model
+```
+
+Output:
+
+```text
+Daily/YYYY-MM-DD Brain Brief.md
+```
+
+The brief includes changed session notes, inbox notes, decisions, open loops, reserved resurfacing space, and source paths.
+
+## Triage The Inbox
+
+Preview suggested moves, tags, links, and merge candidates:
+
+```bash
+/usr/bin/python3 kimi_skill/scripts/inbox_triage.py \
+  --vault "$HOME/Documents/kimi/workspace/familiar-vault"
+```
+
+Apply suggested moves after review:
+
+```bash
+/usr/bin/python3 kimi_skill/scripts/inbox_triage.py \
+  --vault "$HOME/Documents/kimi/workspace/familiar-vault" \
+  --apply
+```
+
+The first version is conservative: it suggests tags and links, but `--apply` only moves notes to safer folders. It does not rewrite note content.
+
+## Generate Project Briefs
+
+Create or refresh `Brief.md` for each project under `Projects/`:
+
+```bash
+/usr/bin/python3 kimi_skill/scripts/project_briefs.py \
+  --vault "$HOME/Documents/kimi/workspace/familiar-vault" \
+  --no-model
+```
+
+Each project brief includes matching project notes, related Kimi session summaries, related inbox notes, detected decisions, open loops, and source paths.
+
+## Audit Vault Quality
+
+Report likely duplicate notes and simple contradiction pairs without modifying files:
+
+```bash
+/usr/bin/python3 kimi_skill/scripts/vault_audit.py \
+  --vault "$HOME/Documents/kimi/workspace/familiar-vault"
+```
+
+The audit is read-only. It returns JSON with `duplicates`, `contradictions`, source paths, and reasons.
+
+## Resurface Useful Notes
+
+Resurface older notes that overlap with recent session, inbox, and project context:
+
+```bash
+/usr/bin/python3 kimi_skill/scripts/resurface.py \
+  --vault "$HOME/Documents/kimi/workspace/familiar-vault" \
+  --date "$(date +%F)" \
+  --limit 5
+```
+
+Output:
+
+```text
+Daily/Resurfaced/YYYY-MM-DD Resurfaced Notes.md
+.familiar/resurface-state.json
+```
+
+The state file prevents the same source note from being resurfaced repeatedly.
+
+## Save A Note From Kimi Work
+
+```bash
+/usr/bin/python3 kimi_skill/scripts/save_to_familiar.py \
+  --vault "$HOME/Documents/kimi/workspace/familiar-vault" \
+  --title "Project decision" \
+  --content "The durable thing to remember." \
+  --links "Kimi Work,Second Brain" \
+  --kind "memory"
+```
+
+## MCP Smoke Test
+
+```bash
+/usr/bin/python3 scripts/smoke_mcp.py \
+  --vault "$HOME/Documents/kimi/workspace/familiar-vault"
+```
+
+Expected output includes:
+
+- Tool names such as `save_memory`, `search_memory`, and `vault_status`.
+- Vault paths for `_Inbox`, `Daily/Kimi Sessions`, and `Daily/Kimi Transcripts`.
+
+## Retrieval Behavior
+
+The `search_memory` MCP tool ranks notes using:
+
+- note title
+- frontmatter tags
+- Markdown headings
+- `[[wikilinks]]`
+- note body
+
+Each match keeps the original `excerpt` field for compatibility and also returns:
+
+```json
+{
+  "matched_fields": ["title", "headings", "body"],
+  "contexts": [
+    {
+      "heading": "Summary",
+      "text": "Compact context window..."
+    }
+  ]
+}
+```
+
+## Test Suite
+
+```bash
+make test
+```
+
+The tests cover:
+
+- MCP stdio framing.
+- Vault path safety.
+- Save/search/read behavior.
+- Kimi session summary capture.
+- Kimi transcript capture.
+- Daily brain brief generation.
+- Inbox triage suggestions and safe apply behavior.
+- Project memory brief generation.
+- Read-only duplicate and contradiction audit.
+- Recurring useful-note resurfacing with state.
+- Maintenance-session filtering.
+
+## Updating The Live Install
+
+After editing source files:
+
+```bash
+/usr/bin/python3 scripts/install.py
+```
+
+Then restart or reopen any MCP client that caches tool definitions.

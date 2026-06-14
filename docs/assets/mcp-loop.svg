@@ -1,0 +1,75 @@
+<svg width="960" height="360" viewBox="0 0 960 360" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">Familiar MCP tool loop</title>
+  <desc id="desc">MCP clients call Familiar tools to search, save, read, and capture sessions.</desc>
+  <style>
+    .bg { fill: #fbfbfd; }
+    .ring { fill: none; stroke: #c9d4df; stroke-width: 18; stroke-linecap: round; stroke-dasharray: 38 22; animation: dash 9s linear infinite; }
+    .card { fill: #ffffff; stroke: #d6dee7; stroke-width: 2; filter: url(#shadow); }
+    .hub { fill: #17202a; }
+    .hubText { fill: #ffffff; font: 800 24px ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+    .label { fill: #17202a; font: 800 18px ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+    .sub { fill: #617181; font: 500 13px ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+    .marker { animation: orbit 7s linear infinite; transform-origin: 480px 180px; }
+    .pulse { animation: pulse 2.6s ease-in-out infinite; transform-origin: center; }
+    .d1 { animation-delay: .45s; }
+    .d2 { animation-delay: .9s; }
+    .d3 { animation-delay: 1.35s; }
+    @keyframes dash {
+      to { stroke-dashoffset: -120; }
+    }
+    @keyframes orbit {
+      to { transform: rotate(360deg); }
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: .76; transform: scale(1.025); }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .ring, .marker, .pulse { animation: none; }
+    }
+  </style>
+  <defs>
+    <filter id="shadow" x="-20%" y="-40%" width="140%" height="180%">
+      <feDropShadow dx="0" dy="10" stdDeviation="12" flood-color="#25364a" flood-opacity=".12"/>
+    </filter>
+  </defs>
+
+  <rect class="bg" width="960" height="360" rx="24"/>
+  <circle class="ring" cx="480" cy="180" r="108"/>
+  <g class="marker">
+    <circle cx="480" cy="72" r="11" fill="#16a085"/>
+    <circle cx="480" cy="72" r="20" fill="#16a085" opacity=".14"/>
+  </g>
+
+  <g class="pulse">
+    <rect class="card" x="80" y="72" width="210" height="76" rx="16"/>
+    <text class="label" x="112" y="113">save_memory</text>
+    <text class="sub" x="112" y="135">durable Markdown capture</text>
+  </g>
+
+  <g class="pulse d1">
+    <rect class="card" x="670" y="72" width="210" height="76" rx="16"/>
+    <text class="label" x="702" y="113">search_memory</text>
+    <text class="sub" x="702" y="135">ranked vault matches</text>
+  </g>
+
+  <g class="pulse d2">
+    <rect class="card" x="80" y="220" width="210" height="76" rx="16"/>
+    <text class="label" x="112" y="261">read/write</text>
+    <text class="sub" x="112" y="283">safe note paths only</text>
+  </g>
+
+  <g class="pulse d3">
+    <rect class="card" x="670" y="220" width="210" height="76" rx="16"/>
+    <text class="label" x="702" y="261">capture_kimi</text>
+    <text class="sub" x="702" y="283">sessions and transcripts</text>
+  </g>
+
+  <circle class="hub" cx="480" cy="180" r="74"/>
+  <text class="hubText" x="430" y="176">Familiar</text>
+  <text class="hubText" x="438" y="204">MCP</text>
+  <path d="M290 110 C362 108 398 126 427 148" stroke="#9fb0c0" stroke-width="3" stroke-linecap="round"/>
+  <path d="M670 110 C598 108 562 126 533 148" stroke="#9fb0c0" stroke-width="3" stroke-linecap="round"/>
+  <path d="M290 258 C362 260 398 234 427 212" stroke="#9fb0c0" stroke-width="3" stroke-linecap="round"/>
+  <path d="M670 258 C598 260 562 234 533 212" stroke="#9fb0c0" stroke-width="3" stroke-linecap="round"/>
+</svg>
